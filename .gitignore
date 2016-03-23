@@ -61,5 +61,10 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
+# JSON
 *.json
 !data/results/*.json
+
+# TEST FILES
+/core/test.py
+
