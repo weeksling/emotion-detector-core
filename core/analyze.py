@@ -93,6 +93,7 @@ def subspace(e_vals, e_vecs):
 
 
 def do_pca(img_folder, max_images=20):
+  # Performs PCA and creates subspace 
 
   X = read_images(img_folder, max_images)
 
@@ -107,20 +108,29 @@ def do_pca(img_folder, max_images=20):
   S = subspace(e_vals, e_vecs)
   print '\nSubspace:', S
 
-  # Project faces on to the sub-space
+  with open('../data/results/subspace.json', 'w') as fp:
+    json.dump(S.tolist(), fp)
+    
+
+def do_projection(img_folder, max_images=20):
+
+  X = read_images(img_folder, max_images)
+  
+  S = []
+
+  with open('../data/results/subspace.json', 'r') as fp:
+    S = json.load(fp)
+  
+  subspace = np.asarray(S)
+
+   # Project faces on to the sub-space
   Y = X.dot(S)
   print "\nResults from Projecting the faces onto the calculated subspace:\n", Y
 
   class_name = os.path.basename(os.path.normpath(img_folder))
-
-  # Store results in JSON File
-  # Will eventually be on DB
-  with open('../data/results/subspace.json', 'w') as fp:
-    json.dump(S.tolist(), fp)
-
+  
   with open('../data/results/'+class_name+'_projection_results.json', 'w') as fp:
     json.dump(Y.tolist(), fp)
-
 
 
   
